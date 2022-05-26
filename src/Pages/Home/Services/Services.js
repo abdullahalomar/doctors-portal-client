@@ -4,6 +4,7 @@ import fluoride from '../../../assets/images/fluoride.png';
 import cavity from '../../../assets/images/cavity.png';
 import whitening from '../../../assets/images/whitening.png';
 import treatment from '../../../assets/images/treatment.png';
+import MakeApointment from './MakeApointment';
 
 const Services = () => {
     const services = [
@@ -52,7 +53,9 @@ const Services = () => {
     </div>
   </div>
 </div>
-        </div>
+            
+<MakeApointment></MakeApointment>
+</div>
     );
 };
 
