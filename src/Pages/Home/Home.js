@@ -1,20 +1,20 @@
 import React from 'react';
 import Banner from './Banner/Banner';
 import Contact from './Contact/Contact';
-import Footer from './Footer';
+import Footer from '../Shared/Footer';
 import Info from './Info/Info';
 import Services from './Services/Services';
 import Testimonials from './Testimonials';
 
 const Home = () => {
     return (
-        <div className='px-12'>
+        <div>
             <Banner></Banner>
             <Info></Info>
             <Services></Services>
             <Testimonials></Testimonials>
             <Contact></Contact>
-            <Footer></Footer>
+            <Footer/>
         </div>
     );
 };
