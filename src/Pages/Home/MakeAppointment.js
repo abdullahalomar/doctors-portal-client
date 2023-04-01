@@ -1,13 +1,13 @@
 import React from 'react';
 import doctor from '../../assets/images/doctor.png';
 import StartedBtn from '../../components/StartedBtn';
-import appoinment from '../../assets/images/appointment.png';
+import appointment from '../../assets/images/appointment.png';
 
-const MakeAppoinment = () => {
+const MakeAppointment = () => {
     return (
         <section 
         style={{
-            background: `url(${appoinment})`
+            background: `url(${appointment})`
         }}
         className='flex justify-center items-center my-40'>
             <div className='flex-1 lg:block hidden'>
@@ -23,4 +23,4 @@ const MakeAppoinment = () => {
     );
 };
 
-export default MakeAppoinment;
+export default MakeAppointment;

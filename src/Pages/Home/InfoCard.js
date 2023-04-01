@@ -3,7 +3,7 @@ import React from 'react';
 const InfoCard = ({img, title, bg}) => {
     return (
         <div class={`card lg:card-side bg-accent shadow-xl text-white ${bg}`}>
-  <figure className='pl-10'>
+  <figure className='pl-10 pt-5'>
     <img src={img} alt="Album"/>
     </figure>
   <div class="card-body">
