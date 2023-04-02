@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Service = ({service}) => {
+const Service = ({service, setTreatment}) => {
     const {name, slots} = service;
     return (
         <div>
@@ -17,7 +17,7 @@ const Service = ({service}) => {
       {
         slots.length > 0 
         ? 
-        <button className="btn btn-secondary uppercase text-white">Book Appointment</button>
+        <label for="booking-modal" className="btn btn-secondary uppercase text-white" onClick={()=>setTreatment(service)}>Book Appointment</label>
         : 
         <button className="btn btn-secondary uppercase text-white" disabled>Book Appointment</button>
       }
