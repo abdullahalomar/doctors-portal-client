@@ -1,12 +1,12 @@
 import React from "react";
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import { useForm } from "react-hook-form";
 import Loader from "../Shared/Loader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+const Signup = () => {
+    const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
   const {
     register,
     formState: { errors },
@@ -14,40 +14,65 @@ const Login = () => {
   } = useForm();
 
   const [
-    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
     user,
     loading,
     error,
-  ] = useSignInWithEmailAndPassword(auth);
+  ] = useCreateUserWithEmailAndPassword(auth);
   
+  const [updateProfile, updating, updateError] = useUpdateProfile(auth);
+
+  const navigate = useNavigate();
 
   let signInError;
 
-  const onSubmit = (data) => {
-    console.log(data);
-    signInWithEmailAndPassword(data.email, data.password);
+  const onSubmit = async data => {
+    await createUserWithEmailAndPassword(data.email, data.password);
+    await updateProfile({ displayName: data.name});
+    console.log('update done');
+    navigate('/appointment');
   };
 
-  if (loading || gLoading) {
+  if (loading || gLoading || updating) {
     return <Loader></Loader>
   }
 
-  if (error || gError) {
-    signInError= <p className="text-red-600">{error?.message || gError?.message}</p>
+  if (error || gError || updateError) {
+    signInError= <p className="text-red-600">{error?.message || gError?.message || updateError?.message}</p>
   }
 
   if (user|| gUser) {
     console.log(user|| gUser);
   }
-
-  
-  return (
-    <div className="flex h-screen justify-center items-center">
+    return (
+        <div className="flex h-screen justify-center items-center">
       <div class="card w-96 bg-base-100 shadow-xl">
         <div class="card-body">
-          <h2 class="card-title mx-auto text-2xl ">Login</h2>
+          <h2 class="card-title mx-auto text-2xl uppercase">Sign Up</h2>
 
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div class="form-control w-full max-w-xs">
+              <label class="label">
+                <span class="label-text">Name</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Name"
+                class="input input-bordered w-full max-w-xs"
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: 'Name is required'
+                  }
+                })}
+              />
+              <label class="label">
+              {errors.name?.type === 'required' && <span class="label-text-alt text-red-600">{errors.name.message}</span>}
+                
+              </label>
+            </div>
+
+
             <div class="form-control w-full max-w-xs">
               <label class="label">
                 <span class="label-text">Email</span>
@@ -102,9 +127,9 @@ const Login = () => {
             </div>
 
              {signInError}   
-            <input className="btn w-full max-w-xs" type="submit" value='LOGIN' />
+            <input className="btn w-full max-w-xs" type="submit" value='SIGNUP' />
           </form>
-          <p>New to Doctors Portal? <Link className="text-primary" to='/signup'>Create new account</Link></p>
+          <p>Already have an account? <Link className="text-primary" to='/login'> Please login</Link></p>
           <div class="divider">OR</div>
           <button
             onClick={() => signInWithGoogle()}
@@ -115,8 +140,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  );
+    );
 };
 
-export default Login;
-<h1>Log in</h1>;
+export default Signup;
