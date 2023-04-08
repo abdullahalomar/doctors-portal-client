@@ -1,15 +1,45 @@
 import { format } from "date-fns";
 import React from "react";
+import auth from "../../firebase.init";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { toast } from 'react-toastify';
+
 
 const BookingModal = ({ treatment, date, setTreatment }) => {
   const { _id, name, slots } = treatment;
+  const [user, loading, error] = useAuthState(auth);
+  const formatedDate = format(date, 'PP');
 
   const handleBooking = event =>{
     event.preventDefault();
+    console.log(event.target.slot.value);
     const slot = event.target.slot.value;
-    console.log(slot, name, _id);
-    setTreatment(null);
+   
+    const booking = {
+      treatmentId : _id,
+      treatment: name,
+      date: formatedDate,
+      slot,
+      patient: user.email,
+      patientName: user.displayName,
+      phone: event.target.phone.value
+    }
+
+    fetch('http://localhost:5000/booking', {
+      method: 'POST',
+      headers: {
+        'content-type' : 'application/json'
+      },
+      body: JSON.stringify(booking)
+    })
+    .then(res => res.json())
+    .then(data=> {
+      console.log(data);
+      setTreatment(null);
+    })
   }
+
+
   return (
     <div>
       <input type="checkbox" id="booking-modal" className="modal-toggle" />
@@ -24,7 +54,6 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
           <h3 className="font-bold text-lg">{name}</h3>
           <form
             onSubmit={handleBooking}
-            action=""
             className="grid grid-cols-1 gap-5 justify-items-center mt-5"
           >
             <input
@@ -35,22 +64,28 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
             />
             <select name="slot" className="select select-bordered w-full max-w-lg">
               {
-                slots.map(slot => <option value={slot}>{slot}</option>)
+                slots.map((slot, index) => <option 
+                key={index}
+                value={slot}
+                >{slot}</option>)
               }
             </select>
             <input
               type="text"
-              placeholder="Name"
+              disabled
+              value={user?.displayName || ''}
               className="input input-bordered w-full max-w-lg"
             />
             <input
               type="text"
-              placeholder="Name"
+              placeholder="Phone Number"
+              name='phone'
               className="input input-bordered w-full max-w-lg"
             />
             <input
               type="email"
-              placeholder="Email"
+              disabled
+              value={user?.email || ''}
               className="input input-bordered w-full max-w-lg"
             />
            

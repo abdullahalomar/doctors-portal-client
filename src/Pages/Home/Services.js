@@ -1,7 +1,7 @@
 import React from 'react';
 import Service from './Service';
 import flouride from '../../assets/images/fluoride.png';
-import cavity from '../../assets/images/fluoride.png';
+import cavity from '../../assets/images/cavity.png';
 import whitning from '../../assets/images/whitening.png';
 
 
